@@ -44,7 +44,7 @@ Therapists spend significant time writing clinical notes after sessions. MindMap
 ### Local (requires NVIDIA GPU with 8GB+ VRAM)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/mindmapper.git
+git clone https://github.com/NotArnav03/mindmapper.git
 cd mindmapper
 pip install -r requirements.txt
 python -m app.ui
