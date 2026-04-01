@@ -1,0 +1,9 @@
+model_name: "mistralai/Mistral-7B-Instruct-v0.2"
+lora_r: 8
+lora_alpha: 16
+learning_rate: 2e-4
+num_epochs: 3
+batch_size: 2
+grad_accum: 4
+max_seq_length: 1024
+output_dir: "./lora_adapter"
