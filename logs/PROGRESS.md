@@ -47,6 +47,10 @@
 > Use this section to log what you did each time you work on this project.
 > Format: ### [DATE] What you did
 
+### [2026-04-02] Update Colab guide to inline UI launch method
+- Replaced `!python -m app.ui` in Step 7 with inline `set_model()` + `build_app()` pattern
+- Added troubleshooting entry for `cannot import name 'set_model'` error
+
 ### [2026-04-02] Fix VRAM crash when launching UI in Colab
 - Added `set_model()` to `ui.py` so a pre-loaded model can be injected instead of reloaded
 - Moved `theme`/`css` from `gr.Blocks()` constructor to `launch()` to fix Gradio 6.0 deprecation warnings

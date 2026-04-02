@@ -63,9 +63,19 @@ fig.show()
 
 ## Step 7 — Launch Gradio UI
 ```python
-!python -m app.ui
+import importlib
+import app.ui
+importlib.reload(app.ui)
+
+from app.ui import set_model, build_app
+set_model(model, tokenizer)  # reuse already-loaded model — avoids VRAM crash
+app = build_app()
+app.launch(share=True)
 ```
 Click the public URL that appears. Share it for demos.
+
+> **Why not `!python -m app.ui`?** That spawns a new subprocess which tries to reload the
+> model into already-occupied VRAM and crashes. Running inline shares the model already in memory.
 
 ---
 
@@ -94,3 +104,4 @@ model, tokenizer = load_model()  # auto-detects ./lora_adapter
 | bitsandbytes not found | Re-run Step 1, restart runtime |
 | JSON parse error in SOAP | Known edge case — re-run Step 5, model is non-deterministic |
 | Gradio URL not appearing | Add share=True in ui.py launch() call |
+| `cannot import name 'set_model'` | Run `!git pull` then use `importlib.reload(app.ui)` before importing |
