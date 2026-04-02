@@ -7,6 +7,7 @@ and viewing SOAP notes with emotion timeline visualizations.
 import os
 
 import gradio as gr
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from app.model import load_model
 from app.soap import generate_soap, format_soap_markdown
@@ -30,6 +31,25 @@ CSS = """
 .prose h1 { color: #2c3e50 !important; }
 .prose h2 { color: #34495e !important; }
 """
+
+# Module-level model cache — can be set externally to reuse an already-loaded model
+_model: AutoModelForCausalLM | None = None
+_tokenizer: AutoTokenizer | None = None
+
+
+def set_model(model: AutoModelForCausalLM, tokenizer: AutoTokenizer) -> None:
+    """Inject a pre-loaded model into the UI to avoid reloading.
+
+    Call this before build_app() when running inline in Colab to share
+    the already-loaded model instead of loading it again in a subprocess.
+
+    Args:
+        model: Pre-loaded language model.
+        tokenizer: Corresponding tokenizer.
+    """
+    global _model, _tokenizer
+    _model = model
+    _tokenizer = tokenizer
 
 
 def load_sample() -> str:
@@ -79,7 +99,10 @@ def process_transcript(
         )
 
     progress(0.1, desc="Loading model...")
-    model, tokenizer = load_model()
+    model = _model
+    tokenizer = _tokenizer
+    if model is None or tokenizer is None:
+        model, tokenizer = load_model()
 
     progress(0.3, desc="Generating SOAP note...")
     soap_dict = generate_soap(transcript, model, tokenizer)
@@ -100,7 +123,7 @@ def build_app() -> gr.Blocks:
     Returns:
         Configured Gradio Blocks instance.
     """
-    with gr.Blocks(theme=THEME, css=CSS, title="MindMapper") as app:
+    with gr.Blocks(title="MindMapper") as app:
         gr.Markdown(
             "# MindMapper\n"
             "*AI-powered therapy session summarizer — "
@@ -153,4 +176,4 @@ def build_app() -> gr.Blocks:
 
 if __name__ == "__main__":
     app = build_app()
-    app.launch(share=True, server_name="0.0.0.0")
+    app.launch(share=True, server_name="0.0.0.0", theme=THEME, css=CSS)
