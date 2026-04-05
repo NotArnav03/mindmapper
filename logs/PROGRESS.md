@@ -47,6 +47,14 @@
 > Use this section to log what you did each time you work on this project.
 > Format: ### [DATE] What you did
 
+### [2026-04-02] Full UI redesign — mature, professional mental health aesthetic
+- Replaced generic Gradio theme with custom CSS design system
+- Deep navy header with DM Serif Display logotype and capability pills
+- Card-based layout with subtle shadows and muted teal/slate palette
+- Styled SOAP output with serif heading + uppercase section labels
+- Refined buttons, textarea focus states, file upload zone
+- Removed Gradio footer clutter
+
 ### [2026-04-02] Update Colab guide to inline UI launch method
 - Replaced `!python -m app.ui` in Step 7 with inline `set_model()` + `build_app()` pattern
 - Added troubleshooting entry for `cannot import name 'set_model'` error
